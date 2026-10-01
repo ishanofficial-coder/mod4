@@ -3,308 +3,860 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HTML & Web Design Exam Quiz (100 Questions)</title>
+  <title>Internet, Email & Web Designing Practice Quiz</title>
   <style>
     :root {
-      --bg-color: #f4f7f6;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
       --card-bg: #ffffff;
-      --text-color: #333333;
-      --primary-color: #007bff;
-      --correct-color: #28a745;
-      --wrong-color: #dc3545;
-      --border-color: #dddddd;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --correct: #16a34a;
+      --correct-bg: #dcfce7;
+      --incorrect: #dc2626;
+      --incorrect-bg: #fee2e2;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      margin: 0;
-      padding: 15px;
+      background-color: var(--bg);
+      color: var(--text);
       display: flex;
       justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
     }
 
     .quiz-container {
+      background-color: var(--card-bg);
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 800px;
-      background: var(--card-bg);
-      padding: 20px;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
+      padding: 2rem;
+    }
+
+    header {
+      margin-bottom: 1.5rem;
     }
 
     h1 {
-      text-align: center;
       font-size: 1.5rem;
-      margin-bottom: 20px;
-      color: #2c3e50;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
     }
 
-    .quiz-stats {
+    .meta-info {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 15px;
-      font-weight: bold;
-      font-size: 0.95rem;
+      align-items: center;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background-color: var(--border);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background-color: var(--primary);
+      width: 0%;
+      transition: width 0.3s ease;
     }
 
     .question-card {
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 15px;
-      margin-bottom: 20px;
-      background-color: #fafafa;
+      margin-bottom: 1.5rem;
     }
 
-    .question-title {
-      font-size: 1.1rem;
+    .question-text {
+      font-size: 1.125rem;
       font-weight: 600;
-      margin-bottom: 15px;
-      word-wrap: break-word;
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
     }
 
-    .options-list {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .option-item {
-      background-color: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      padding: 12px;
-      margin-bottom: 10px;
-      cursor: pointer;
-    }
-
-    .option-item.correct {
-      background-color: var(--correct-color) !important;
-      color: #ffffff !important;
-      border-color: var(--correct-color) !important;
-    }
-
-    .option-item.wrong {
-      background-color: var(--wrong-color) !important;
-      color: #ffffff !important;
-      border-color: var(--wrong-color) !important;
-    }
-
-    .option-item.disabled {
-      pointer-events: none;
-    }
-
-    .feedback-msg {
-      margin-top: 10px;
-      font-weight: bold;
-      font-size: 0.95rem;
-    }
-
-    .feedback-msg.correct-text {
-      color: var(--correct-color);
-    }
-
-    .feedback-msg.wrong-text {
-      color: var(--wrong-color);
-    }
-
-    .nav-buttons {
+    .options-grid {
       display: flex;
-      justify-content: space-between;
-      margin-top: 15px;
+      flex-direction: column;
+      gap: 0.75rem;
     }
 
-    button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 4px;
-      background-color: var(--primary-color);
-      color: white;
+    .option-btn {
+      background-color: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 0.875rem 1.25rem;
+      text-align: left;
+      font-size: 0.975rem;
+      color: var(--text);
       cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      width: 100%;
     }
 
-    button:disabled {
-      background-color: #cccccc;
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background-color: #eff6ff;
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+    }
+
+    .option-btn.correct {
+      background-color: var(--correct-bg) !important;
+      border-color: var(--correct) !important;
+      color: var(--correct) !important;
+      font-weight: 600;
+    }
+
+    .option-btn.incorrect {
+      background-color: var(--incorrect-bg) !important;
+      border-color: var(--incorrect) !important;
+      color: var(--incorrect) !important;
+      font-weight: 600;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+
+    .btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn:disabled {
+      background-color: var(--border);
       cursor: not-allowed;
     }
 
-    @media (max-width: 600px) {
-      body {
-        padding: 5px;
-      }
-      .quiz-container {
-        padding: 12px;
-      }
-      .question-title {
-        font-size: 1rem;
-      }
-      .option-item {
-        padding: 10px;
-        font-size: 0.9rem;
-      }
+    .summary-screen {
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    .summary-screen h2 {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .score-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: #eff6ff;
+      border: 4px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 1.5rem auto;
+    }
+
+    .hide {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-<div class="quiz-container">
-  <h1>HTML & Web Design Exam</h1>
-  <div class="quiz-stats">
-    <span id="progress-text">Question 1 of 100</span>
-    <span id="score-text">Score: 0 / 100</span>
+  <div class="quiz-container">
+    <!-- Active Quiz Screen -->
+    <div id="quiz-screen">
+      <header>
+        <h1>Internet & Web Design Examination</h1>
+        <div class="meta-info">
+          <span id="question-counter">Question 1 of 100</span>
+          <span id="score-counter">Score: 0</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+      </header>
+
+      <main class="question-card">
+        <div class="question-text" id="question-text">Loading question...</div>
+        <div class="options-grid" id="options-container">
+          <!-- Options rendered via JS -->
+        </div>
+      </main>
+
+      <footer class="controls">
+        <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>Next Question</button>
+      </footer>
+    </div>
+
+    <!-- Final Summary Screen -->
+    <div id="summary-screen" class="summary-screen hide">
+      <h2>Quiz Completed!</h2>
+      <p>Here is your final performance summary:</p>
+      <div class="score-circle" id="final-score">0 / 100</div>
+      <p id="feedback-text" style="margin-bottom: 1.5rem; color: var(--text-muted);"></p>
+      <button class="btn" onclick="restartQuiz()">Restart Quiz</button>
+    </div>
   </div>
 
-  <div id="quiz-body">
-    <!-- Questions dynamic display -->
-  </div>
-
-  <div class="nav-buttons">
-    <button id="prev-btn" onclick="changeQuestion(-1)" disabled>Previous</button>
-    <button id="next-btn" onclick="changeQuestion(1)">Next</button>
-  </div>
-</div>
-
-<script>
-  // 100 Questions fully generated without duplicates
-  const baseQuestions = [
-    { q: "What does HTML stand for?", options: ["Hyper Transfer Markup Language", "Hyper Text Markup Language", "High Text Machine Language", "Hyperlink Text Management Language"], answer: 1 },
-    { q: "Which tag is used to create a line break in HTML?", options: ["<lb>", "<br>", "<break>", "<newline>"], answer: 1 },
-    { q: "What type of language is HTML?", options: ["Programming Language", "Markup Language", "Database Language", "Scripting Language"], answer: 1 },
-    { q: "Who invented the World Wide Web (WWW)?", options: ["Vint Cerf", "Tim Berners-Lee", "Bob Kahn", "Lawrence Roberts"], answer: 1 },
-    { q: "Which element is an empty tag in HTML?", options: ["<p>", "<hr>", "<div>", "<span>"], answer: 1 },
-    { q: "What is the correct file extension for saving HTML files?", options: [".txt", ".html", ".doc", ".site"], answer: 1 },
-    { q: "Which heading tag represents the largest heading?", options: ["<h6>", "<h1>", "<head>", "<header>"], answer: 1 },
-    { q: "Which tag is used to display italic text?", options: ["<italic>", "<i>", "<emtag>", "<style>"], answer: 1 },
-    { q: "What is the default alignment for paragraph text in HTML?", options: ["Center", "Left", "Right", "Justify"], answer: 1 },
-    { q: "Which attribute is used to specify the background color of a page in classic HTML?", options: ["background", "bgcolor", "color", "style-color"], answer: 1 },
-    { q: "Which HTML tag is used to define an ordered list?", options: ["<ul>", "<ol>", "<li>", "<dl>"], answer: 1 },
-    { q: "Which tag defines an item inside a list?", options: ["<item>", "<li>", "<list>", "<ol-item>"], answer: 1 },
-    { q: "What is the purpose of the <marquee> tag?", options: ["To play audio", "To create scrolling text", "To draw a border", "To highlight text"], answer: 1 },
-    { q: "Which attribute specifies the image source path in an <img> tag?", options: ["link", "src", "href", "file"], answer: 1 },
-    { q: "What tag is used to create a hyperlink?", options: ["<link>", "<a>", "<url>", "<hyper>"], answer: 1 },
-    { q: "What does 'href' stand for in an anchor tag?", options: ["Hyperlink File", "Hypertext Reference", "Header Reference", "HTML Reference"], answer: 1 },
-    { q: "Which HTML tag is used to render superscript text?", options: ["<sub>", "<sup>", "<super>", "<up>"], answer: 1 },
-    { q: "Which HTML tag is used to render subscript text?", options: ["<sup>", "<sub>", "<down>", "<base>"], answer: 1 },
-    { q: "Which tag is used to embed video files in HTML5?", options: ["<media>", "<video>", "<movie>", "<play>"], answer: 1 },
-    { q: "Which attribute enables play/pause controls on a <video> element?", options: ["play", "controls", "buttons", "media"], answer: 1 },
-    { q: "Which element creates a table row?", options: ["<td>", "<tr>", "<th>", "<table-row>"], answer: 1 },
-    { q: "Which element defines a standard data cell in a table?", options: ["<tr>", "<td>", "<th>", "<cell>"], answer: 1 },
-    { q: "Which element creates a bold header cell in a table?", options: ["<td>", "<th>", "<head>", "<caption>"], answer: 1 },
-    { q: "Which attribute merges table cells vertically across rows?", options: ["colspan", "rowspan", "grid-row", "merge-row"], answer: 1 },
-    { q: "Which attribute merges table cells horizontally across columns?", options: ["rowspan", "colspan", "grid-col", "merge-col"], answer: 1 },
-    { q: "Which entity code represents a non-breaking space?", options: ["&space;", "&nbsp;", "&blank;", "&break;"], answer: 1 },
-    { q: "Which entity code represents the less-than symbol (<)?", options: ["&less;", "&lt;", "&gt;", "&symbol;"], answer: 1 },
-    { q: "What is the smallest font size value in basic HTML <font> tags?", options: ["0", "1", "7", "12"], answer: 1 },
-    { q: "What is the largest font size value in basic HTML <font> tags?", options: ["10", "7", "100", "1"], answer: 1 },
-    { q: "Which protocol is designed to securely transfer web pages?", options: ["HTTP", "HTTPS", "FTP", "SMTP"], answer: 1 },
-    { q: "Which protocol is used for sending emails?", options: ["POP3", "SMTP", "IMAP", "HTTP"], answer: 1 },
-    { q: "Which email protocol manages emails directly on the server?", options: ["SMTP", "IMAP", "FTP", "DHCP"], answer: 1 },
-    { q: "In an email structure, what does 'BCC' stand for?", options: ["Basic Carbon Copy", "Blind Carbon Copy", "Backup Carbon Copy", "Binary Carbon Copy"], answer: 1 },
-    { q: "What does IP stand for in IP address?", options: ["Internal Path", "Internet Protocol", "Information Point", "Inter-Process"], answer: 1 },
-    { q: "Which technology allows wireless connection over a short distance?", options: ["Wi-Fi", "Bluetooth", "Ethernet", "WLAN"], answer: 1 },
-    { q: "What type of malware self-replicates across networks?", options: ["Virus", "Worm", "Spyware", "Trojan"], answer: 1 },
-    { q: "What type of attack uses fake emails to steal sensitive data?", options: ["Spam", "Phishing", "Adware", "DDoS"], answer: 1 },
-    { q: "What type of e-commerce model is eBay consumer-to-consumer sales?", options: ["B2C", "C2C", "B2B", "C2B"], answer: 1 },
-    { q: "What type of e-commerce model represents business-to-business?", options: ["B2C", "B2B", "C2B", "B2E"], answer: 1 },
-    { q: "Which platform hosts static websites directly from code repositories?", options: ["WordPress", "GitHub Pages", "Shopify", "Squarespace"], answer: 1 },
-    { q: "What software is required to view and execute HTML pages?", options: ["Text Editor", "Web Browser", "Database Server", "Compiler"], answer: 1 },
-    { q: "Which tag is used for preformatted text?", options: ["<code>", "<pre>", "<format>", "<text>"], answer: 1 },
-    { q: "Which tag adds semantic importance and renders text bold?", options: ["<b>", "<strong>", "<imp>", "<mark>"], answer: 1 },
-    { q: "Which tag highlights text with a default yellow background?", options: ["<color>", "<mark>", "<highlight>", "<bg>"], answer: 1 },
-    { q: "Which tag defines strikethrough text in HTML?", options: ["<del>", "<s>", "<strike-line>", "<cross>"], answer: 1 },
-    { q: "What is space between cell border and content called?", options: ["Cellspacing", "Cellpadding", "Margin", "Border-width"], answer: 1 },
-    { q: "What is space between adjacent table cells called?", options: ["Cellpadding", "Cellspacing", "Gap", "Padding"], answer: 1 },
-    { q: "Which platform allows building websites visually without coding?", options: ["VS Code", "Wix", "Notepad++", "Sublime Text"], answer: 1 },
-    { q: "What is an advantage of using Google Drive cloud storage?", options: ["No internet needed", "Real-time access anywhere", "Works on desktop only", "Offline execution"], answer: 1 },
-    { q: "What does TCP stand for in networking?", options: ["Text Control Protocol", "Transmission Control Protocol", "Transfer Communication Protocol", "Terminal Control Path"], answer: 1 }
-  ];
-
-  // Complete list of 100 questions clearly defined
-  const questions = [];
-  for (let i = 0; i < 100; i++) {
-    if (i < baseQuestions.length) {
-      questions.push(baseQuestions[i]);
-    } else {
-      questions.push({
-        q: `HTML & Web Design Review Question ${i + 1}: What is the primary role of HTML tags?`,
-        options: ["To style elements", "To structure web page content", "To manipulate databases", "To run server scripts"],
-        answer: 1
-      });
-    }
-  }
-
-  let currentQuestion = 0;
-  let userAnswers = new Array(questions.length).fill(null);
-  let score = 0;
-
-  function renderQuestion() {
-    const qData = questions[currentQuestion];
-    const container = document.getElementById('quiz-body');
-    
-    document.getElementById('progress-text').innerText = `Question ${currentQuestion + 1} of ${questions.length}`;
-    document.getElementById('score-text').innerText = `Score: ${score} / ${questions.length}`;
-    
-    let html = `
-      <div class="question-card">
-        <div class="question-title">${currentQuestion + 1}. ${escapeHtml(qData.q)}</div>
-        <ul class="options-list">
-    `;
-
-    qData.options.forEach((opt, idx) => {
-      let className = "option-item";
-      if (userAnswers[currentQuestion] !== null) {
-        className += " disabled";
-        if (idx === qData.answer) {
-          className += " correct";
-        } else if (idx === userAnswers[currentQuestion]) {
-          className += " wrong";
-        }
+  <script>
+    const rawQuestions = [
+      {
+        q: "What concept behind modern computer networking involves breaking data into small pieces before transmission?",
+        options: ["Packet switching", "Circuit switching", "Frequency modulation", "Linear routing"],
+        answer: 0
+      },
+      {
+        q: "Which scientist is credited with developing the concept of packet switching?",
+        options: ["Leonard Kleinrock", "Tim Berners-Lee", "Lawrence Roberts", "Vint Cerf"],
+        answer: 0
+      },
+      {
+        q: "In 1965, long-distance computer networking was demonstrated by connecting computers in Massachusetts and California over telephone lines by whom?",
+        options: ["Lawrence Roberts", "Bob Kahn", "Tim Berners-Lee", "Leonard Kleinrock"],
+        answer: 0
+      },
+      {
+        q: "Which university was NOT among the initial four connected by ARPANET in 1969?",
+        options: ["MIT", "UCLA", "Stanford", "UCSB"],
+        answer: 0
+      },
+      {
+        q: "In which decade did TCP/IP become the universal standard protocol for ARPANET?",
+        options: ["1983", "1969", "1991", "2001"],
+        answer: 0
+      },
+      {
+        q: "Who invented the World Wide Web (WWW) during the early 1990s?",
+        options: ["Tim Berners-Lee", "Vint Cerf", "Bob Kahn", "Leonard Kleinrock"],
+        answer: 0
+      },
+      {
+        q: "What is an IP address?",
+        options: ["A unique numerical address assigned to every device on a network", "A web browser extension", "An HTML formatting attribute", "A domain hosting server"],
+        answer: 0
+      },
+      {
+        q: "In an IPv4 address like 192.168.140.1, what are the four distinct sections separated by dots called?",
+        options: ["Octets", "Bytes", "Protocols", "Subdomains"],
+        answer: 0
+      },
+      {
+        q: "What is the maximum numerical value for any single octet in an IPv4 address?",
+        options: ["255", "100", "512", "1024"],
+        answer: 0
+      },
+      {
+        q: "Which protocol is primarily used for transferring formatted web documents across the Internet securely using encryption?",
+        options: ["HTTPS", "FTP", "SMTP", "POP3"],
+        answer: 0
+      },
+      {
+        q: "Which protocol is dedicated to transferring files directly between a client and server?",
+        options: ["FTP", "HTTP", "IMAP", "DNS"],
+        answer: 0
+      },
+      {
+        q: "What is the primary role of a Web Browser?",
+        options: ["Locating, viewing, and interacting with web pages", "Hosting website databases", "Providing digital internet connections", "Encrypting emails"],
+        answer: 0
+      },
+      {
+        q: "Which statement accurately distinguishes the Internet from the World Wide Web?",
+        options: ["The Internet is the network infrastructure; the WWW is a service running on top of it.", "The WWW is physical hardware; the Internet is software.", "The Internet only handles email, while the WWW handles everything else.", "There is no difference; the terms are completely identical."],
+        answer: 0
+      },
+      {
+        q: "What is the unique text-based name or web address used to identify a specific website called?",
+        options: ["Domain Name / URL", "IP Octet", "Hyperlink Identifier", "HTML Tag"],
+        answer: 0
+      },
+      {
+        q: "Which search tool is designed specifically to find other websites and resources using keywords?",
+        options: ["Search Engine", "Web Browser", "FTP Client", "Email Server"],
+        answer: 0
+      },
+      {
+        q: "Which email retrieval protocol downloads emails to a single local device and usually removes them from the server?",
+        options: ["POP3", "IMAP", "SMTP", "HTTP"],
+        answer: 0
+      },
+      {
+        q: "Which protocol is used specifically for sending outgoing email messages across networks?",
+        options: ["SMTP", "POP3", "IMAP", "FTP"],
+        answer: 0
+      },
+      {
+        q: "Which digital communication channel offers speeds up to 64 Kbps per channel over digital telephone lines?",
+        options: ["ISDN", "ADSL", "Fiber Optic", "5G Cellular"],
+        answer: 0
+      },
+      {
+        q: "What does ADSL stand for?",
+        options: ["Asymmetric Digital Subscriber Line", "Automated Digital System Link", "Asynchronous Data Server Line", "Advanced Digital Signal Loop"],
+        answer: 0
+      },
+      {
+        q: "What is a major characteristic of a Leased Line connection?",
+        options: ["Dedicated, permanent link with consistent symmetric speeds", "Shared bandwidth with variable speeds", "Requires dialing in each time", "Operates exclusively over satellite"],
+        answer: 0
+      },
+      {
+        q: "Which e-business system model categorizes transactions occurring directly between two commercial organizations?",
+        options: ["B2B", "B2C", "C2C", "C2B"],
+        answer: 0
+      },
+      {
+        q: "A consumer selling a used item to another consumer via platforms like eBay or Facebook Marketplace is an example of:",
+        options: ["C2C", "B2C", "B2E", "C2B"],
+        answer: 0
+      },
+      {
+        q: "An employee accessing an internal corporate intranet portal to submit leave requests is an example of:",
+        options: ["B2E", "B2B", "C2B", "C2C"],
+        answer: 0
+      },
+      {
+        q: "A freelancer offering design services to corporations on Upwork represents which business model?",
+        options: ["C2B", "B2C", "C2C", "B2E"],
+        answer: 0
+      },
+      {
+        q: "What component of an e-commerce website manages item selection, quantities, and interface with payment processing?",
+        options: ["Shopping Cart", "Web Server", "Domain Registrar", "Search Engine"],
+        answer: 0
+      },
+      {
+        q: "Which technology protects sensitive financial data sent over public networks by scrambling it into unreadable code?",
+        options: ["Encryption", "Compression", "Formatting", "Parsing"],
+        answer: 0
+      },
+      {
+        q: "What does HTML stand for?",
+        options: ["Hypertext Markup Language", "Hyperlink Text Management Language", "High-Level Text Machine Language", "Home Tool Markup Language"],
+        answer: 0
+      },
+      {
+        q: "In what year was the first official standard, HTML 2.0, released?",
+        options: ["1995", "1991", "1999", "2012"],
+        answer: 0
+      },
+      {
+        q: "Which major standard version of HTML was published in 2012, bringing native multimedia and interactive support?",
+        options: ["HTML5", "HTML4.01", "XHTML", "HTML 3.2"],
+        answer: 0
+      },
+      {
+        q: "Who is credited with creating HTML in 1991?",
+        options: ["Tim Berners-Lee", "Brendan Eich", "Håkon Wium Lie", "Marc Andreessen"],
+        answer: 0
+      },
+      {
+        q: "Is HTML considered a programming language?",
+        options: ["No, it is a markup language used for structuring content.", "Yes, it has full logic and computational functions.", "Yes, it compiles directly into binary executable code.", "No, it is a database query language."],
+        answer: 0
+      },
+      {
+        q: "Which file extension MUST be used when saving an HTML document?",
+        options: [".html", ".txt", ".doc", ".site"],
+        answer: 0
+      },
+      {
+        q: "When saving an HTML file in plain text editors like Notepad, what should the 'Save as type' setting be?",
+        options: ["All Files (*.*)", "Text Document (*.txt)", "Rich Text Format (*.rtf)", "Executable File (*.exe)"],
+        answer: 0
+      },
+      {
+        q: "How does an HTML parser treat multiple spaces and line breaks within standard source text?",
+        options: ["It collapses them into a single whitespace character", "It throws a syntax error", "It renders each space literally on screen", "It automatically converts them into <br> tags"],
+        answer: 0
+      },
+      {
+        q: "Is HTML case-sensitive regarding tag names?",
+        options: ["No, <b> and <B> produce identical results", "Yes, all tags must be written in strict uppercase", "Yes, all tags must be written in strict lowercase", "Yes, tags must use camelCase"],
+        answer: 0
+      },
+      {
+        q: "What type of HTML tag consists of both an opening tag and a closing tag wrapping content?",
+        options: ["Container Tag", "Empty Tag", "Self-closing Tag", "Void Tag"],
+        answer: 0
+      },
+      {
+        q: "Which tag is an example of an 'Empty Tag' (Void Element) in HTML?",
+        options: ["<br>", "<p>", "<div>", "<span>"],
+        answer: 0
+      },
+      {
+        q: "What declaration should be placed at the very top line of an modern HTML5 document?",
+        options: ["<!DOCTYPE html>", "<html>", "<head>", "<meta charset='UTF-8'>"],
+        answer: 0
+      },
+      {
+        q: "Which HTML element contains document metadata that is NOT rendered directly on the main page canvas?",
+        options: ["<head>", "<body>", "<main>", "<footer>"],
+        answer: 0
+      },
+      {
+        q: "Which element holds all the visible structure and content of a web page?",
+        options: ["<body>", "<head>", "<title>", "<meta>"],
+        answer: 0
+      },
+      {
+        q: "Where does the text placed inside the <title> tag appear?",
+        options: ["On the browser tab or window title bar", "At the top of the webpage body in big text", "In the browser's URL address bar", "Inside the status bar at the bottom"],
+        answer: 0
+      },
+      {
+        q: "Which tag is used to create a standard paragraph block in HTML?",
+        options: ["<p>", "<paragraph>", "<para>", "<block>"],
+        answer: 0
+      },
+      {
+        q: "What is the function of the <br> tag?",
+        options: ["Inserts a single line break without starting a new paragraph", "Draws a horizontal rule line", "Bolds the text", "Creates a blank paragraph block"],
+        answer: 0
+      },
+      {
+        q: "How many levels of standard heading tags does HTML provide?",
+        options: ["6 (h1 through h6)", "5 (h1 through h5)", "10 (h1 through h10)", "3 (h1 through h3)"],
+        answer: 0
+      },
+      {
+        q: "Which heading tag represents the highest importance level (largest main heading)?",
+        options: ["<h1>", "<h6>", "<head>", "<header>"],
+        answer: 0
+      },
+      {
+        q: "Which tag represents the lowest importance level among heading elements?",
+        options: ["<h6>", "<h1>", "<h0>", "<h8>"],
+        answer: 0
+      },
+      {
+        q: "Which tag is used to make text bold in modern semantic HTML?",
+        options: ["<strong>", "<bold>", "<bld>", "<black>"],
+        answer: 0
+      },
+      {
+        q: "Which tag is used to italicize text for stylistic offset?",
+        options: ["<i>", "<italic>", "<it>", "<style>"],
+        answer: 0
+      },
+      {
+        q: "Which element is used to mark text with stress emphasis semantically?",
+        options: ["<em>", "<emp>", "<i>", "<highlight>"],
+        answer: 0
+      },
+      {
+        q: "What is the primary function of the <u> tag in HTML?",
+        options: ["Underlines text", "Unorders text", "Updates text", "Unlinks text"],
+        answer: 0
+      },
+      {
+        q: "In basic legacy HTML formatting, what tag was used to modify text size, color, and font family?",
+        options: ["<font>", "<style>", "<text>", "<format>"],
+        answer: 0
+      },
+      {
+        q: "What are the numerical bounds for the 'size' attribute in the legacy <font> tag?",
+        options: ["1 (smallest) to 7 (largest)", "1 to 10", "10 to 72", "0 to 100"],
+        answer: 0
+      },
+      {
+        q: "Which attribute of the <body> tag sets a page's background color in legacy HTML?",
+        options: ["bgcolor", "background", "color", "bg"],
+        answer: 0
+      },
+      {
+        q: "Which attribute of the <body> tag sets the global default text color?",
+        options: ["text", "color", "textcolor", "fontcolor"],
+        answer: 0
+      },
+      {
+        q: "How is an unordered (bulleted) list defined in HTML?",
+        options: ["<ul>", "<ol>", "<list>", "<bl>"],
+        answer: 0
+      },
+      {
+        q: "How is an ordered (numbered) list defined in HTML?",
+        options: ["<ol>", "<ul>", "<nl>", "<list>"],
+        answer: 0
+      },
+      {
+        q: "Which tag defines an individual item inside either an ordered or unordered list?",
+        options: ["<li>", "<item>", "<point>", "<list-item>"],
+        answer: 0
+      },
+      {
+        q: "Which HTML tag is used to render scrolling or animated text horizontally across a screen?",
+        options: ["<marquee>", "<scroll>", "<animate>", "<move>"],
+        answer: 0
+      },
+      {
+        q: "What attribute value setting makes a <marquee> element bounce text back and forth across the container?",
+        options: ["behavior='alternate'", "behavior='bounce'", "direction='loop'", "type='reverse'"],
+        answer: 0
+      },
+      {
+        q: "Which element is used to insert an image into an HTML page?",
+        options: ["<img>", "<image>", "<picture>", "<media>"],
+        answer: 0
+      },
+      {
+        q: "Which attribute in an <img> tag provides the path or URL to the source image file?",
+        options: ["src", "href", "url", "path"],
+        answer: 0
+      },
+      {
+        q: "What is the purpose of the 'alt' attribute on an <img> element?",
+        options: ["Displays alternate text if the image fails to load and aids accessibility", "Specifies alignment on page", "Sets alternative image source", "Defines image background color"],
+        answer: 0
+      },
+      {
+        q: "Which tag is used to create a hyperlink in HTML?",
+        options: ["<a>", "<link>", "<href>", "<url>"],
+        answer: 0
+      },
+      {
+        q: "What does the 'href' attribute in an anchor tag (<a>) stand for?",
+        options: ["Hypertext Reference", "Hyperlink Target", "Heading Reference", "HTML Resource Format"],
+        answer: 0
+      },
+      {
+        q: "Which empty tag renders a visual horizontal dividing rule across a page?",
+        options: ["<hr>", "<line>", "<break>", "<border>"],
+        answer: 0
+      },
+      {
+        q: "Which tag renders text as superscript (elevated above the line)?",
+        options: ["<sup>", "<sub>", "<super>", "<up>"],
+        answer: 0
+      },
+      {
+        q: "Which tag renders text as subscript (lowered below the line)?",
+        options: ["<sub>", "<sup>", "<subscript>", "<down>"],
+        answer: 0
+      },
+      {
+        q: "Which HTML5 tag is used to embed video clips directly onto a web page?",
+        options: ["<video>", "<media>", "<movie>", "<clip>"],
+        answer: 0
+      },
+      {
+        q: "What attribute must be added to a <video> element to show standard playback controls (play/pause/volume)?",
+        options: ["controls", "autoplay", "navigation", "buttons"],
+        answer: 0
+      },
+      {
+        q: "Which element defines an outer data table structure in HTML?",
+        options: ["<table>", "<grid>", "<tab>", "<data-table>"],
+        answer: 0
+      },
+      {
+        q: "Which tag defines a table row container?",
+        options: ["<tr>", "<td>", "<th>", "<row>"],
+        answer: 0
+      },
+      {
+        q: "Which tag defines a standard table data cell?",
+        options: ["<td>", "<tr>", "<th>", "<cell>"],
+        answer: 0
+      },
+      {
+        q: "Which tag defines a table header cell with text bolded and centered by default?",
+        options: ["<th>", "<td>", "<head>", "<header>"],
+        answer: 0
+      },
+      {
+        q: "Which attribute merges adjacent table cells across multiple columns?",
+        options: ["colspan", "rowspan", "merge", "span"],
+        answer: 0
+      },
+      {
+        q: "Which attribute merges adjacent table cells vertically across multiple rows?",
+        options: ["rowspan", "colspan", "vmerge", "rowextend"],
+        answer: 0
+      },
+      {
+        q: "What attribute controls space between the inner cell border and its internal text content?",
+        options: ["cellpadding", "cellspacing", "padding", "margin"],
+        answer: 0
+      },
+      {
+        q: "What attribute controls space between individual adjacent cells in a table?",
+        options: ["cellspacing", "cellpadding", "border-gap", "grid-spacing"],
+        answer: 0
+      },
+      {
+        q: "Which character entity code inserts a non-breaking space in HTML?",
+        options: ["&nbsp;", "&space;", "&blank;", "&break;"],
+        answer: 0
+      },
+      {
+        q: "Which character entity code displays the 'less-than' symbol (<) safely in text?",
+        options: ["&lt;", "&gt;", "&less;", "&amp;"],
+        answer: 0
+      },
+      {
+        q: "Which character entity code displays the 'greater-than' symbol (>)?",
+        options: ["&gt;", "&lt;", "&great;", "&amp;"],
+        answer: 0
+      },
+      {
+        q: "Which character entity code represents the ampersand symbol (&)?",
+        options: ["&amp;", "&and;", "&ampersand;", "&symbol;"],
+        answer: 0
+      },
+      {
+        q: "Which character entity displays double quotation marks (\")?",
+        options: ["&quot;", "&quote;", "&dq;", "&mark;"],
+        answer: 0
+      },
+      {
+        q: "What free hosting platform lets you host web applications directly from a code repository?",
+        options: ["GitHub Pages", "Wix", "WordPress.com", "Squarespace"],
+        answer: 0
+      },
+      {
+        q: "Which platform offers a drag-and-drop website creation interface requiring zero coding knowledge?",
+        options: ["Wix", "GitHub Pages", "VS Code", "Sublime Text"],
+        answer: 0
+      },
+      {
+        q: "Which software tool is classified as a source code editor?",
+        options: ["Visual Studio Code", "Google Chrome", "Mozilla Firefox", "Apache Server"],
+        answer: 0
+      },
+      {
+        q: "What tag is used to draw a strikethrough line across text?",
+        options: ["<s>", "<strike-line>", "<del-text>", "<cut>"],
+        answer: 0
+      },
+      {
+        q: "Which tag is used to display short inline quotations enclosed automatically in quotes?",
+        options: ["<q>", "<quote>", "<cite>", "<inline-quote>"],
+        answer: 0
+      },
+      {
+        q: "Which HTML5 tag represents the completion progress of a task visually?",
+        options: ["<progress>", "<meter>", "<bar>", "<status>"],
+        answer: 0
+      },
+      {
+        q: "Which tag displays text in a smaller font scale relative to surrounding body text?",
+        options: ["<small>", "<tiny>", "<min>", "<subtext>"],
+        answer: 0
+      },
+      {
+        q: "What is an HTML attribute?",
+        options: ["A key-value pair placed inside an opening tag adding extra properties", "A closing tag marker", "An external stylesheet reference", "A script execution loop"],
+        answer: 0
+      },
+      {
+        q: "In HTML syntax rules, values assigned to attributes should ideally be enclosed within:",
+        options: ["Quotation marks", "Curly braces", "Square brackets", "Angle brackets"],
+        answer: 0
+      },
+      {
+        q: "What is an HTML element defined as?",
+        options: ["The complete structure including opening tag, attributes, content, and closing tag", "Just the opening tag alone", "The CSS style definitions", "The document header section"],
+        answer: 0
+      },
+      {
+        q: "To insert a blank empty cell into a table row structure, which entity can be placed inside <td></td>?",
+        options: ["&nbsp;", "<blank>", "null", "<space>"],
+        answer: 0
+      },
+      {
+        q: "What is the primary function of a Virtual Private Network (VPN)?",
+        options: ["Encrypts internet connections and hides online identity", "Increases raw download speed by 2x", "Removes viruses from local hard drives", "Hosts web pages online for free"],
+        answer: 0
+      },
+      {
+        q: "Which protocol allows synchronized email management across multiple devices linked to a central server?",
+        options: ["IMAP", "POP3", "SMTP", "FTP"],
+        answer: 0
+      },
+      {
+        q: "What type of system integrates core business processes across departments into a unified software environment?",
+        options: ["ERP (Enterprise Resource Planning)", "CRM", "HTML", "FTP"],
+        answer: 0
+      },
+      {
+        q: "What type of system manages client communications, sales leads, and service requests?",
+        options: ["CRM (Customer Relationship Management)", "ERP", "DNS", "ISDN"],
+        answer: 0
+      },
+      {
+        q: "Which tag allows embedding sub-sources like different formats inside a <video> element?",
+        options: ["<source>", "<src>", "<media>", "<file>"],
+        answer: 0
+      },
+      {
+        q: "What structural container wraps all table data cells in a horizontal alignment row?",
+        options: ["<tr>", "<table>", "<thead>", "<col>"],
+        answer: 0
+      },
+      {
+        q: "Which platform provides cloud storage and real-time document collaboration?",
+        options: ["Google Drive / OneDrive", "Notepad++", "ARPANET", "ISDN"],
+        answer: 0
       }
+    ];
 
-      html += `<li class="${className}" onclick="selectOption(${idx})">${escapeHtml(opt)}</li>`;
+    // Shuffle options dynamically and keep track of answer
+    let questions = rawQuestions.map(item => {
+      let opts = [...item.options];
+      let correctText = opts[item.answer];
+      // Fisher-Yates shuffle options
+      for (let i = opts.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [opts[i], opts[j]] = [opts[j], opts[i]];
+      }
+      return {
+        q: item.q,
+        options: opts,
+        answer: opts.indexOf(correctText)
+      };
     });
 
-    html += `</ul>`;
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let answered = false;
 
-    if (userAnswers[currentQuestion] !== null) {
-      if (userAnswers[currentQuestion] === qData.answer) {
-        html += `<div class="feedback-msg correct-text">Correct Answer!</div>`;
+    const questionTextEl = document.getElementById("question-text");
+    const optionsContainerEl = document.getElementById("options-container");
+    const questionCounterEl = document.getElementById("question-counter");
+    const scoreCounterEl = document.getElementById("score-counter");
+    const progressBarEl = document.getElementById("progress-bar");
+    const nextBtn = document.getElementById("next-btn");
+
+    function loadQuestion() {
+      answered = false;
+      nextBtn.disabled = true;
+
+      const qData = questions[currentQuestionIndex];
+      questionTextEl.textContent = `${currentQuestionIndex + 1}. ${qData.q}`;
+      
+      questionCounterEl.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+      scoreCounterEl.textContent = `Score: ${score}`;
+      
+      const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+      progressBarEl.style.width = `${progressPercent}%`;
+
+      optionsContainerEl.innerHTML = "";
+
+      const optionLabels = ["A", "B", "C", "D"];
+
+      qData.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.innerHTML = `<strong>${optionLabels[idx]}&nbsp;&nbsp;</strong> ${escapeHtml(opt)}`;
+        btn.onclick = () => selectOption(idx);
+        optionsContainerEl.appendChild(btn);
+      });
+    }
+
+    function selectOption(selectedIndex) {
+      if (answered) return;
+      answered = true;
+
+      const qData = questions[currentQuestionIndex];
+      const buttons = optionsContainerEl.querySelectorAll(".option-btn");
+
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (selectedIndex === qData.answer) {
+        buttons[selectedIndex].classList.add("correct");
+        score++;
+        scoreCounterEl.textContent = `Score: ${score}`;
       } else {
-        html += `<div class="feedback-msg wrong-text">Incorrect! Correct answer: ${escapeHtml(qData.options[qData.answer])}</div>`;
+        buttons[selectedIndex].classList.add("incorrect");
+        buttons[qData.answer].classList.add("correct");
+      }
+
+      nextBtn.disabled = false;
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        loadQuestion();
+      } else {
+        showSummary();
       }
     }
 
-    html += `</div>`;
-    container.innerHTML = html;
+    function showSummary() {
+      document.getElementById("quiz-screen").classList.add("hide");
+      document.getElementById("summary-screen").classList.remove("hide");
+      
+      const scoreCircle = document.getElementById("final-score");
+      scoreCircle.textContent = `${score} / ${questions.length}`;
 
-    document.getElementById('prev-btn').disabled = (currentQuestion === 0);
-    document.getElementById('next-btn').disabled = (currentQuestion === questions.length - 1);
-  }
+      const feedback = document.getElementById("feedback-text");
+      const percentage = (score / questions.length) * 100;
 
-  function escapeHtml(str) {
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  }
-
-  function selectOption(index) {
-    if (userAnswers[currentQuestion] !== null) return;
-    
-    userAnswers[currentQuestion] = index;
-    if (index === questions[currentQuestion].answer) {
-      score++;
+      if (percentage >= 85) {
+        feedback.textContent = "Outstanding performance! You have mastered the material.";
+      } else if (percentage >= 70) {
+        feedback.textContent = "Great job! You demonstrate a solid understanding.";
+      } else if (percentage >= 50) {
+        feedback.textContent = "Good effort! Review the covered material to improve further.";
+      } else {
+        feedback.textContent = "Keep practicing! Re-read the chapters and try again.";
+      }
     }
-    renderQuestion();
-  }
 
-  function changeQuestion(direction) {
-    currentQuestion += direction;
-    renderQuestion();
-  }
+    function restartQuiz() {
+      currentQuestionIndex = 0;
+      score = 0;
+      document.getElementById("summary-screen").classList.add("hide");
+      document.getElementById("quiz-screen").classList.remove("hide");
+      loadQuestion();
+    }
 
-  // Start
-  renderQuestion();
-</script>
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
 
+    // Initialize Quiz
+    loadQuestion();
+  </script>
 </body>
 </html>
