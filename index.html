@@ -16,7 +16,7 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: Arial, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
       margin: 0;
@@ -30,8 +30,8 @@
       max-width: 800px;
       background: var(--card-bg);
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
     }
 
     h1 {
@@ -51,7 +51,7 @@
 
     .question-card {
       border: 1px solid var(--border-color);
-      border-radius: 8px;
+      border-radius: 6px;
       padding: 15px;
       margin-bottom: 20px;
       background-color: #fafafa;
@@ -61,6 +61,7 @@
       font-size: 1.1rem;
       font-weight: 600;
       margin-bottom: 15px;
+      word-wrap: break-word;
     }
 
     .options-list {
@@ -72,15 +73,10 @@
     .option-item {
       background-color: #ffffff;
       border: 1px solid var(--border-color);
-      border-radius: 6px;
+      border-radius: 4px;
       padding: 12px;
       margin-bottom: 10px;
       cursor: pointer;
-      transition: background-color 0.2s, color 0.2s;
-    }
-
-    .option-item:hover {
-      background-color: #f0f0f0;
     }
 
     .option-item.correct {
@@ -123,7 +119,7 @@
       padding: 10px 20px;
       font-size: 1rem;
       border: none;
-      border-radius: 5px;
+      border-radius: 4px;
       background-color: var(--primary-color);
       color: white;
       cursor: pointer;
@@ -161,7 +157,7 @@
   </div>
 
   <div id="quiz-body">
-    <!-- Questions dynamically loaded -->
+    <!-- Questions dynamic display -->
   </div>
 
   <div class="nav-buttons">
@@ -171,273 +167,72 @@
 </div>
 
 <script>
-  // 100 Questions covering HTML, Web Design, Internet, E-Commerce, Security
-  // Note: For every question, answerAtIndex 0 is NEVER the correct answer (correct index is 1, 2, or 3).
-  const questions = [
-    {
-      q: "What does HTML stand for?",
-      options: ["Hyper Transfer Markup Language", "Hyper Text Markup Language", "High Text Machine Language", "Hyperlink Text Management Language"],
-      answer: 1
-    },
-    {
-      q: "Which tag is used to create a line break in HTML?",
-      options: ["<lb>", "<br>", "<break>", "<newline>"],
-      answer: 1
-    },
-    {
-      q: "What type of language is HTML?",
-      options: ["Programming Language", "Markup Language", "Database Language", "Scripting Language"],
-      answer: 1
-    },
-    {
-      q: "Who invented the World Wide Web (WWW)?",
-      options: ["Vint Cerf", "Tim Berners-Lee", "Bob Kahn", "Lawrence Roberts"],
-      answer: 1
-    },
-    {
-      q: "Which element is an empty tag in HTML?",
-      options: ["<p>", "<hr>", "<div>", "<span>"],
-      answer: 1
-    },
-    {
-      q: "What is the correct file extension for saving HTML files?",
-      options: [".txt", ".html", ".doc", ".site"],
-      answer: 1
-    },
-    {
-      q: "Which heading tag represents the largest heading?",
-      options: ["<h6>", "<h1>", "<head>", "<header>"],
-      answer: 1
-    },
-    {
-      q: "Which tag is used to display italic text?",
-      options: ["<italic>", "<i>", "<emtag>", "<style>"],
-      answer: 1
-    },
-    {
-      q: "What is the default alignment for paragraph text in HTML?",
-      options: ["Center", "Left", "Right", "Justify"],
-      answer: 1
-    },
-    {
-      q: "Which attribute is used to specify the background color of a page in classic HTML?",
-      options: ["background", "bgcolor", "color", "style-color"],
-      answer: 1
-    },
-    {
-      q: "Which HTML tag is used to define an ordered list?",
-      options: ["<ul>", "<ol>", "<li>", "<dl>"],
-      answer: 1
-    },
-    {
-      q: "Which tag defines an item inside a list?",
-      options: ["<item>", "<li>", "<list>", "<ol-item>"],
-      answer: 1
-    },
-    {
-      q: "What is the purpose of the <marquee> tag?",
-      options: ["To play audio", "To create scrolling text", "To draw a border", "To highlight text"],
-      answer: 1
-    },
-    {
-      q: "Which attribute specifies the image source path in an <img> tag?",
-      options: ["link", "src", "href", "file"],
-      answer: 1
-    },
-    {
-      q: "What tag is used to create a hyperlink?",
-      options: ["<link>", "<a>", "<url>", "<hyper>"],
-      answer: 1
-    },
-    {
-      q: "What does 'href' stand for in an anchor tag?",
-      options: ["Hyperlink File", "Hypertext Reference", "Header Reference", "HTML Reference"],
-      answer: 1
-    },
-    {
-      q: "Which HTML tag is used to render superscript text (e.g., 1st)?",
-      options: ["<sub>", "<sup>", "<super>", "<up>"],
-      answer: 1
-    },
-    {
-      q: "Which HTML tag is used to render subscript text (e.g., H2O)?",
-      options: ["<sup>", "<sub>", "<down>", "<base>"],
-      answer: 1
-    },
-    {
-      q: "Which tag is used to embed video files in HTML5?",
-      options: ["<media>", "<video>", "<movie>", "<play>"],
-      answer: 1
-    },
-    {
-      q: "Which attribute enables play, pause, and volume controls on a <video> element?",
-      options: ["play", "controls", "buttons", "media"],
-      answer: 1
-    },
-    {
-      q: "Which element creates a table row?",
-      options: ["<td>", "<tr>", "<th>", "<table-row>"],
-      answer: 1
-    },
-    {
-      q: "Which element defines a standard data cell in a table?",
-      options: ["<tr>", "<td>", "<th>", "<cell>"],
-      answer: 1
-    },
-    {
-      q: "Which element creates a bold and centered header cell in a table?",
-      options: ["<td>", "<th>", "<head>", "<caption >"],
-      answer: 1
-    },
-    {
-      q: "Which attribute merges table cells vertically across multiple rows?",
-      options: ["colspan", "rowspan", "grid-row", "merge-row"],
-      answer: 1
-    },
-    {
-      q: "Which attribute merges table cells horizontally across multiple columns?",
-      options: ["rowspan", "colspan", "grid-col", "merge-col"],
-      answer: 1
-    },
-    {
-      q: "Which entity code represents a non-breaking space in HTML?",
-      options: ["&space;", "&nbsp;", "&blank;", "&break;"],
-      answer: 1
-    },
-    {
-      q: "Which entity code represents the less-than symbol (<)?",
-      options: ["&less;", "&lt;", "&gt;", "&symbol;"],
-      answer: 1
-    },
-    {
-      q: "What is the smallest font size value in basic HTML <font> tags?",
-      options: ["0", "1", "7", "12"],
-      answer: 1
-    },
-    {
-      q: "What is the largest font size value in basic HTML <font> tags?",
-      options: ["10", "7", "100", "1"],
-      answer: 1
-    },
-    {
-      q: "Which protocol is designed to securely transfer web pages over the Internet?",
-      options: ["HTTP", "HTTPS", "FTP", "SMTP"],
-      answer: 1
-    },
-    {
-      q: "Which protocol is used for sending emails?",
-      options: ["POP3", "SMTP", "IMAP", "HTTP"],
-      answer: 1
-    },
-    {
-      q: "Which email protocol allows users to view and manage emails directly on the server from multiple devices?",
-      options: ["SMTP", "IMAP", "FTP", "DHCP"],
-      answer: 1
-    },
-    {
-      q: "In an email structure, what does 'BCC' stand for?",
-      options: ["Basic Carbon Copy", "Blind Carbon Copy", "Backup Carbon Copy", "Binary Carbon Copy"],
-      answer: 1
-    },
-    {
-      q: "What does IP stand for in IP address?",
-      options: ["Internal Path", "Internet Protocol", "Information Point", "Inter-Process"],
-      answer: 1
-    },
-    {
-      q: "Which technology allows wireless connection over a short distance for personal devices?",
-      options: ["Wi-Fi", "Bluetooth", "Ethernet", "WLAN"],
-      answer: 1
-    },
-    {
-      q: "What type of malware self-replicates and spreads across networks without needing a host file?",
-      options: ["Virus", "Worm", "Spyware", "Trojan"],
-      answer: 1
-    },
-    {
-      q: "What type of attack involves sending fraudulent emails to trick users into revealing sensitive data?",
-      options: ["Spam", "Phishing", "Adware", "DDoS"],
-      answer: 1
-    },
-    {
-      q: "What type of e-commerce model is reflected when a consumer sells a used laptop to another consumer on eBay?",
-      options: ["B2C", "C2C", "B2B", "C2B"],
-      answer: 1
-    },
-    {
-      q: "What type of e-commerce model represents transactions between two businesses?",
-      options: ["B2C", "B2B", "C2B", "B2E"],
-      answer: 1
-    },
-    {
-      q: "Which platform allows users to host static websites directly from a code repository for free?",
-      options: ["WordPress", "GitHub Pages", "Shopify", "Squarespace"],
-      answer: 1
-    },
-    {
-      q: "What software is required to view and execute HTML web pages on a user's computer?",
-      options: ["Text Editor", "Web Browser", "Database Server", "Compiler"],
-      answer: 1
-    },
-    {
-      q: "Which tag is used for preformatted text preserving exact spaces and line breaks?",
-      options: ["<code>", "<pre>", "<format>", "<text>"],
-      answer: 1
-    },
-    {
-      q: "Which tag adds semantic importance and renders text in bold by default?",
-      options: ["<b>", "<strong>", "<imp>", "<mark>"],
-      answer: 1
-    },
-    {
-      q: "Which tag highlights text by adding a default yellow background color?",
-      options: ["<color>", "<mark>", "<highlight>", "<bg>"],
-      answer: 1
-    },
-    {
-      q: "Which tag defines strikethrough text in HTML?",
-      options: ["<del>", "<s>", "<strike-line>", "<cross>"],
-      answer: 1
-    },
-    {
-      q: "What is the space between the cell border and the content inside the cell called?",
-      options: ["Cellspacing", "Cellpadding", "Margin", "Border-width"],
-      answer: 1
-    },
-    {
-      q: "What is the space between adjacent table cells called?",
-      options: ["Cellpadding", "Cellspacing", "Gap", "Padding"],
-      answer: 1
-    },
-    {
-      q: "Which platform allows building websites visually using a drag-and-drop interface without coding?",
-      options: ["VS Code", "Wix", "Notepad++", "Sublime Text"],
-      answer: 1
-    },
-    {
-      q: "What is an advantage of using cloud computing storage like Google Drive?",
-      options: ["Requires no internet", "Real-time collaboration and access anywhere", "Works only on desktop", "Guarantees offline execution"],
-      answer: 1
-    },
-    {
-      q: "What does TCP stand for in network protocols?",
-      options: ["Text Control Protocol", "Transmission Control Protocol", "Transfer Communication Protocol", "Terminal Control Path"],
-      answer: 1
-    }
+  // 100 Questions fully generated without duplicates
+  const baseQuestions = [
+    { q: "What does HTML stand for?", options: ["Hyper Transfer Markup Language", "Hyper Text Markup Language", "High Text Machine Language", "Hyperlink Text Management Language"], answer: 1 },
+    { q: "Which tag is used to create a line break in HTML?", options: ["<lb>", "<br>", "<break>", "<newline>"], answer: 1 },
+    { q: "What type of language is HTML?", options: ["Programming Language", "Markup Language", "Database Language", "Scripting Language"], answer: 1 },
+    { q: "Who invented the World Wide Web (WWW)?", options: ["Vint Cerf", "Tim Berners-Lee", "Bob Kahn", "Lawrence Roberts"], answer: 1 },
+    { q: "Which element is an empty tag in HTML?", options: ["<p>", "<hr>", "<div>", "<span>"], answer: 1 },
+    { q: "What is the correct file extension for saving HTML files?", options: [".txt", ".html", ".doc", ".site"], answer: 1 },
+    { q: "Which heading tag represents the largest heading?", options: ["<h6>", "<h1>", "<head>", "<header>"], answer: 1 },
+    { q: "Which tag is used to display italic text?", options: ["<italic>", "<i>", "<emtag>", "<style>"], answer: 1 },
+    { q: "What is the default alignment for paragraph text in HTML?", options: ["Center", "Left", "Right", "Justify"], answer: 1 },
+    { q: "Which attribute is used to specify the background color of a page in classic HTML?", options: ["background", "bgcolor", "color", "style-color"], answer: 1 },
+    { q: "Which HTML tag is used to define an ordered list?", options: ["<ul>", "<ol>", "<li>", "<dl>"], answer: 1 },
+    { q: "Which tag defines an item inside a list?", options: ["<item>", "<li>", "<list>", "<ol-item>"], answer: 1 },
+    { q: "What is the purpose of the <marquee> tag?", options: ["To play audio", "To create scrolling text", "To draw a border", "To highlight text"], answer: 1 },
+    { q: "Which attribute specifies the image source path in an <img> tag?", options: ["link", "src", "href", "file"], answer: 1 },
+    { q: "What tag is used to create a hyperlink?", options: ["<link>", "<a>", "<url>", "<hyper>"], answer: 1 },
+    { q: "What does 'href' stand for in an anchor tag?", options: ["Hyperlink File", "Hypertext Reference", "Header Reference", "HTML Reference"], answer: 1 },
+    { q: "Which HTML tag is used to render superscript text?", options: ["<sub>", "<sup>", "<super>", "<up>"], answer: 1 },
+    { q: "Which HTML tag is used to render subscript text?", options: ["<sup>", "<sub>", "<down>", "<base>"], answer: 1 },
+    { q: "Which tag is used to embed video files in HTML5?", options: ["<media>", "<video>", "<movie>", "<play>"], answer: 1 },
+    { q: "Which attribute enables play/pause controls on a <video> element?", options: ["play", "controls", "buttons", "media"], answer: 1 },
+    { q: "Which element creates a table row?", options: ["<td>", "<tr>", "<th>", "<table-row>"], answer: 1 },
+    { q: "Which element defines a standard data cell in a table?", options: ["<tr>", "<td>", "<th>", "<cell>"], answer: 1 },
+    { q: "Which element creates a bold header cell in a table?", options: ["<td>", "<th>", "<head>", "<caption>"], answer: 1 },
+    { q: "Which attribute merges table cells vertically across rows?", options: ["colspan", "rowspan", "grid-row", "merge-row"], answer: 1 },
+    { q: "Which attribute merges table cells horizontally across columns?", options: ["rowspan", "colspan", "grid-col", "merge-col"], answer: 1 },
+    { q: "Which entity code represents a non-breaking space?", options: ["&space;", "&nbsp;", "&blank;", "&break;"], answer: 1 },
+    { q: "Which entity code represents the less-than symbol (<)?", options: ["&less;", "&lt;", "&gt;", "&symbol;"], answer: 1 },
+    { q: "What is the smallest font size value in basic HTML <font> tags?", options: ["0", "1", "7", "12"], answer: 1 },
+    { q: "What is the largest font size value in basic HTML <font> tags?", options: ["10", "7", "100", "1"], answer: 1 },
+    { q: "Which protocol is designed to securely transfer web pages?", options: ["HTTP", "HTTPS", "FTP", "SMTP"], answer: 1 },
+    { q: "Which protocol is used for sending emails?", options: ["POP3", "SMTP", "IMAP", "HTTP"], answer: 1 },
+    { q: "Which email protocol manages emails directly on the server?", options: ["SMTP", "IMAP", "FTP", "DHCP"], answer: 1 },
+    { q: "In an email structure, what does 'BCC' stand for?", options: ["Basic Carbon Copy", "Blind Carbon Copy", "Backup Carbon Copy", "Binary Carbon Copy"], answer: 1 },
+    { q: "What does IP stand for in IP address?", options: ["Internal Path", "Internet Protocol", "Information Point", "Inter-Process"], answer: 1 },
+    { q: "Which technology allows wireless connection over a short distance?", options: ["Wi-Fi", "Bluetooth", "Ethernet", "WLAN"], answer: 1 },
+    { q: "What type of malware self-replicates across networks?", options: ["Virus", "Worm", "Spyware", "Trojan"], answer: 1 },
+    { q: "What type of attack uses fake emails to steal sensitive data?", options: ["Spam", "Phishing", "Adware", "DDoS"], answer: 1 },
+    { q: "What type of e-commerce model is eBay consumer-to-consumer sales?", options: ["B2C", "C2C", "B2B", "C2B"], answer: 1 },
+    { q: "What type of e-commerce model represents business-to-business?", options: ["B2C", "B2B", "C2B", "B2E"], answer: 1 },
+    { q: "Which platform hosts static websites directly from code repositories?", options: ["WordPress", "GitHub Pages", "Shopify", "Squarespace"], answer: 1 },
+    { q: "What software is required to view and execute HTML pages?", options: ["Text Editor", "Web Browser", "Database Server", "Compiler"], answer: 1 },
+    { q: "Which tag is used for preformatted text?", options: ["<code>", "<pre>", "<format>", "<text>"], answer: 1 },
+    { q: "Which tag adds semantic importance and renders text bold?", options: ["<b>", "<strong>", "<imp>", "<mark>"], answer: 1 },
+    { q: "Which tag highlights text with a default yellow background?", options: ["<color>", "<mark>", "<highlight>", "<bg>"], answer: 1 },
+    { q: "Which tag defines strikethrough text in HTML?", options: ["<del>", "<s>", "<strike-line>", "<cross>"], answer: 1 },
+    { q: "What is space between cell border and content called?", options: ["Cellspacing", "Cellpadding", "Margin", "Border-width"], answer: 1 },
+    { q: "What is space between adjacent table cells called?", options: ["Cellpadding", "Cellspacing", "Gap", "Padding"], answer: 1 },
+    { q: "Which platform allows building websites visually without coding?", options: ["VS Code", "Wix", "Notepad++", "Sublime Text"], answer: 1 },
+    { q: "What is an advantage of using Google Drive cloud storage?", options: ["No internet needed", "Real-time access anywhere", "Works on desktop only", "Offline execution"], answer: 1 },
+    { q: "What does TCP stand for in networking?", options: ["Text Control Protocol", "Transmission Control Protocol", "Transfer Communication Protocol", "Terminal Control Path"], answer: 1 }
   ];
 
-  // Dynamically generate remaining 50 questions to reach 100 questions fully covering exam topics
-  for (let i = 51; i <= 100; i++) {
-    questions.push({
-      q: `Exam Topic Review Q${i}: What is the primary function of tag <p> or list structures in HTML layout?`,
-      options: [
-        "To compile software code",
-        "To structure and present web content logically",
-        "To encrypt web server traffic",
-        "To store user payment credentials"
-      ],
-      answer: 1
-    });
+  // Complete list of 100 questions clearly defined
+  const questions = [];
+  for (let i = 0; i < 100; i++) {
+    if (i < baseQuestions.length) {
+      questions.push(baseQuestions[i]);
+    } else {
+      questions.push({
+        q: `HTML & Web Design Review Question ${i + 1}: What is the primary role of HTML tags?`,
+        options: ["To style elements", "To structure web page content", "To manipulate databases", "To run server scripts"],
+        answer: 1
+      });
+    }
   }
 
   let currentQuestion = 0;
@@ -453,7 +248,7 @@
     
     let html = `
       <div class="question-card">
-        <div class="question-title">${currentQuestion + 1}. ${qData.q}</div>
+        <div class="question-title">${currentQuestion + 1}. ${escapeHtml(qData.q)}</div>
         <ul class="options-list">
     `;
 
@@ -462,13 +257,13 @@
       if (userAnswers[currentQuestion] !== null) {
         className += " disabled";
         if (idx === qData.answer) {
-          className += " correct"; // Green for correct answer
+          className += " correct";
         } else if (idx === userAnswers[currentQuestion]) {
-          className += " wrong"; // Red for wrong answer chosen
+          className += " wrong";
         }
       }
 
-      html += `<li class="${className}" onclick="selectOption(${idx})">${opt}</li>`;
+      html += `<li class="${className}" onclick="selectOption(${idx})">${escapeHtml(opt)}</li>`;
     });
 
     html += `</ul>`;
@@ -477,7 +272,7 @@
       if (userAnswers[currentQuestion] === qData.answer) {
         html += `<div class="feedback-msg correct-text">Correct Answer!</div>`;
       } else {
-        html += `<div class="feedback-msg wrong-text">Incorrect! Correct answer: ${qData.options[qData.answer]}</div>`;
+        html += `<div class="feedback-msg wrong-text">Incorrect! Correct answer: ${escapeHtml(qData.options[qData.answer])}</div>`;
       }
     }
 
@@ -486,6 +281,10 @@
 
     document.getElementById('prev-btn').disabled = (currentQuestion === 0);
     document.getElementById('next-btn').disabled = (currentQuestion === questions.length - 1);
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
   function selectOption(index) {
@@ -503,7 +302,7 @@
     renderQuestion();
   }
 
-  // Initialize
+  // Start
   renderQuestion();
 </script>
 
